@@ -1,0 +1,27 @@
+service: nest-serverless-lambda-docker
+
+provider:
+  name: aws
+  ecr:
+    # In this section you can define images that will be built locally and uploaded to ECR
+    images:
+      nest-app:
+        path: ./
+        file: Dockerfile.Lambda
+
+plugins:
+  - serverless-offline
+
+functions:
+  main:
+    memorySize: 512
+    timeout: 30
+    image:
+      name: nest-app
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
